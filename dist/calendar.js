@@ -53,7 +53,7 @@
 	function controller($scope) {
 
 		var timeIncrements = 30 * 60 * 1000,
-			baseDay = $scope.ngModel || new Date(),
+			baseDay = new Date($scope.ngModel),
 			adjustedDate = new Date(Math.ceil(baseDay.getTime() / timeIncrements) * timeIncrements),
 			month = baseDay.getMonth(),
 			year = baseDay.getFullYear();
@@ -117,7 +117,7 @@
 
 		$scope.isSelected = function(d) {
 			var model = $scope.ngModel;
-			return model && d && model.getTime() === d.date.getTime();
+			return angular.isDate(model) && angular.isDate(model) && model.getTime() === d.date.getTime();
 		};
 
 		$scope.open = function() {
