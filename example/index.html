@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="example">
+    <head>
+        <title>Blakgeek Calendar Example</title>
+        <script src="//use.typekit.net/nuk7nlg.js"></script>
+            <script>try{Typekit.load();}catch(e){}</script>
+        <link href="../css/calendar.css" type="text/css" rel="stylesheet"/>
+        <style>
+            body {
+                font-family: "proxima-nova-soft", sans-serif;
+                font-size: 13px;
+            }
+        </style>
+    </head>
+    <body ng-controller="ExampleCtrl">
+
+        <bg-cal ng-model="date"></bg-cal>
+        <div ng-click="reset()">{{date}}</div>
+
+        <script src="../bower_components/angular/angular.min.js"></script>
+        <script src="../bower_components/moment/min/moment.min.js"></script>
+        <script src="../calendar.js"></script>
+        <script src="index.js"></script>
+    </body>
+</html>

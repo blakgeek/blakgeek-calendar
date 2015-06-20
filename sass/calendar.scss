@@ -1,0 +1,124 @@
+@import "bourbon/bourbon";
+
+bg-cal {
+
+  display: inline-block;
+  position: relative;
+  font-size: 0;
+
+  &.open {
+
+    .bg-cal-calendar {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  .bg-cal-date, .bg-cal-time {
+
+    font-size: 16px;
+    line-height: 40px;
+    padding: 0 20px;
+    border: 1px solid #aaa;
+    cursor: pointer;
+  }
+
+  .bg-cal-date {
+    display: inline-block;
+  }
+
+  .bg-cal-time {
+    position: relative;
+    display: inline-block;
+    select {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      width: 100%;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .bg-cal-calendar {
+    font-size: 16px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    visibility: hidden;
+    opacity: 0;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f4f4f4;
+    @include user-select(none);
+
+    header {
+      overflow: auto;
+      margin: 0 0 12px;
+      text-align: center;
+
+      .bg-cal-month-year {
+        display: inline-block;
+        font-size: 1.2em;
+        font-weight: 400;
+        vertical-align: middle;
+        line-height: 30px;
+      }
+
+      .bg-cal-next,
+      .bg-cal-prev {
+        vertical-align: middle;
+        display: inline-block;
+        padding: 0 10px 0 10px;
+        line-height: 30px;
+        color: white;
+        background-color: #444;
+        font-weight: 600;
+        border-radius: 5px;
+
+      }
+
+      .bg-cal-next {
+        float: right;
+        &:before {
+          content: '>';
+        }
+      }
+
+      .bg-cal-prev {
+        float: left;
+        background-color: #444;
+        &:before {
+          content: '<';
+        }
+      }
+    }
+
+    table {
+
+      width: 240px;
+
+      td {
+        font-weight: 400;
+        height: 24px;
+        padding-bottom: .2em;
+        border-radius: 5px;
+        vertical-align: middle;
+        text-align: center;
+        line-height: 24px;
+
+        &.bg-cal-day {
+          cursor: pointer;
+        }
+
+        &.bg-cal-selected {
+          background-color: #f87a54;
+        }
+      }
+    }
+  }
+}

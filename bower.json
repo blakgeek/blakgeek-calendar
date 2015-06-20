@@ -1,0 +1,28 @@
+{
+  "name": "bg-calendar",
+  "version": "0.1.1",
+  "authors": [
+    "blakgeek@gmail.com"
+  ],
+  "description": "A purdy little calendar widget",
+  "main": "calendar.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "angularjs",
+    "calendar"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.1",
+    "moment": "~2.10.3"
+  }
+}
