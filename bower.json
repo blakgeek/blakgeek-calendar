@@ -1,11 +1,11 @@
 {
   "name": "bg-calendar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "authors": [
     "blakgeek@gmail.com"
   ],
   "description": "A purdy little calendar widget",
-  "main": "calendar.js",
+  "main": ["dist/calendar.js", "dist/calendar.css"],
   "moduleType": [
     "node"
   ],

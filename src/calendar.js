@@ -60,7 +60,6 @@
 
 		$scope.ngModel = adjustedDate;
 		$scope.time = moment(adjustedDate).format('HH:mm');
-		console.log($scope.time);
 		$scope.times = [];
 
 		for(var i = 0; i<24; i++) {
@@ -111,7 +110,6 @@
 
 			if(day) {
 				var date = moment(day.date);
-				console.log(date.format('YYYY-MM-DD ') + $scope.time)
 				$scope.ngModel = moment(date.format('YYYY-MM-DD ') + $scope.time, 'YYYY-MM-DD HH:mm').toDate();
 				$scope.close();
 			}
@@ -124,7 +122,6 @@
 
 		$scope.open = function() {
 
-			console.log('clickity click');
 			widget.addClass('open');
 		};
 
@@ -153,7 +150,6 @@
 			templateUrl: '/calendar.html',
 			link: function(scope, el, attr) {
 				widget = el;
-				console.log(el);
 			},
 			controller: controller
 		}
