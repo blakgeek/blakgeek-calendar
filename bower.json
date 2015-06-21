@@ -1,11 +1,14 @@
 {
   "name": "bg-calendar",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "authors": [
     "blakgeek@gmail.com"
   ],
   "description": "A purdy little calendar widget",
-  "main": ["dist/calendar.js", "dist/calendar.css"],
+  "main": [
+    "dist/calendar.js",
+    "dist/calendar.css"
+  ],
   "moduleType": [
     "node"
   ],
@@ -23,6 +26,7 @@
   ],
   "dependencies": {
     "angular": "~1.4.1",
-    "moment": "~2.10.3"
+    "moment": "~2.10.3",
+    "blakgeek-calendar": "~0.1.3"
   }
 }

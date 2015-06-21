@@ -15,7 +15,7 @@
 			'December'
 		],
 		hr24 = 24 * 60 * 60 * 1000,
-		widget;
+		$element;
 
 	function generateWeeks(date) {
 
@@ -51,7 +51,7 @@
 		return weeks;
 	}
 
-	function controller($scope) {
+	function controller($scope, $element) {
 
 		var timeIncrements = 30 * 60 * 1000,
 			baseDay = new Date($scope.ngModel || new Date()),
@@ -133,19 +133,19 @@
 
 		$scope.open = function() {
 
-			widget.addClass('open');
+			$element.addClass('open');
 			$scope.isOpen = true;
 		};
 
 		$scope.toggle = function() {
 
-			widget.toggleClass('open');
+			$element.toggleClass('open');
 			$scope.isOpen = !$scope.isOpen;
 		};
 
 		$scope.close = function() {
 
-			widget.removeClass('open');
+			$element.removeClass('open');
 			$scope.isOpen = false;
 		};
 
@@ -167,9 +167,6 @@
 				bgCalMonth: "@"
 			},
 			templateUrl: '/calendar.html',
-			link: function(scope, el, attr) {
-				widget = el;
-			},
 			controller: controller
 		}
 	}
