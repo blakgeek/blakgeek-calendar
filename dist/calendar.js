@@ -1,21 +1,19 @@
 (function() {
 
 	var months = [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-			'July',
-			'August',
-			'September',
-			'October',
-			'November',
-			'December'
-		],
-		hr24 = 24 * 60 * 60 * 1000,
-		$element;
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December'
+	];
 
 	function generateWeeks(date) {
 
@@ -51,11 +49,12 @@
 		return weeks;
 	}
 
-	function controller($scope, $element) {
+	function controller($scope, $element, $attrs) {
 
-		var timeIncrements = 30 * 60 * 1000,
+		var minuteStep = +($attrs.bgCalMinuteStep || 30),
+			milliStep = minuteStep * 60 * 1000,
 			baseDay = new Date($scope.ngModel || new Date()),
-			adjustedDate = new Date(Math.ceil(baseDay.getTime() / timeIncrements) * timeIncrements),
+			adjustedDate = new Date(Math.ceil(baseDay.getTime() / milliStep) * milliStep),
 			month = baseDay.getMonth(),
 			year = baseDay.getFullYear();
 
@@ -63,31 +62,22 @@
 		$scope.time = moment(adjustedDate).format('HH:mm');
 		$scope.times = [];
 
-		for(var i = 0; i<24; i++) {
-
-			var dh = i % 12,
-				vh = i,
-				a = i > 11 ? 'pm' : 'am';
-
-			if(dh % 12 === 0 ) {
-				dh = 12;
-			}
-
-			if(vh < 10) {
-				vh = '0' + vh;
-			}
+		var d = moment('19761215', 'YYYYMMDD');
+		for(var i = 0; i < 1440; i += minuteStep) {
 
 			$scope.times.push({
-				value: vh + ':00',
-				display: dh  + ':00 ' + a
+				value: d.format('HH:mm'),
+				display: d.format('h:mm a')
 			});
-			$scope.times.push({
-				value: vh + ':30',
-				display: dh + ':30 ' + a
-			});
+			d.add(minuteStep, 'm');
 		}
 
 		$scope.$watch('ngModel', function(newVal, oldVal) {
+
+			if(angular.isString(newVal)) {
+				console.log('converting to date');
+				newVal = new Date(newVal);
+			}
 
 			if(angular.isDate(newVal) &&
 				(!angular.isDate(oldVal) ||
@@ -122,7 +112,6 @@
 
 			if(day) {
 				$scope.date = day.date;
-				$scope.close();
 			}
 		};
 
@@ -163,8 +152,7 @@
 		return {
 			scope: {
 				ngModel: "=",
-				bgCalYear: "@",
-				bgCalMonth: "@"
+				bgCalMinuteSteps: "@"
 			},
 			templateUrl: '/calendar.html',
 			controller: controller
@@ -186,7 +174,7 @@ angular.module('blakgeek.calendar').run(['$templateCache', function($templateCac
   'use strict';
 
   $templateCache.put('/calendar.html',
-    "<div ng-click=\"toggle()\" class=\"bg-cal-date\">{{ngModel|moment:'MM/DD/YYYY'}}</div><div class=\"bg-cal-time\">{{ngModel|moment:'h:mm a'}}<select ng-options=\"t.value as t.display for t in times\" ng-model=\"time\"></select></div><div ng-if=\"isOpen\" class=\"bg-cal-calendar\"><header><div ng-click=\"prev()\" class=\"bg-cal-prev\"></div><div class=\"bg-cal-month-year\">{{month}} {{year}}</div><div ng-click=\"next()\" class=\"bg-cal-next\"></div></header><main><table><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr></thead><tbody><tr ng-repeat=\"week in weeks\"><td ng-repeat=\"day in week track by $index\" ng-class=\"{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}\" ng-click=\"select(day)\">{{day.d}}</td></tr></tbody></table></main></div>"
+    "<div ng-click=\"toggle()\" class=\"bg-cal-datetime\">{{ngModel|moment:'MM/DD/YYYY @ h:mm a'}}</div><div ng-click=\"toggle()\" class=\"bg-cal-toggle\"></div><div class=\"bg-cal-calendar\"><header><div ng-click=\"prev()\" class=\"bg-cal-prev\"></div><div class=\"bg-cal-month-year\">{{month}} {{year}}</div><div ng-click=\"next()\" class=\"bg-cal-next\"></div></header><main><table><thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody><tr ng-repeat=\"week in weeks\"><td ng-repeat=\"day in week track by $index\" ng-class=\"{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}\" ng-click=\"select(day)\">{{day.d}}</td></tr></tbody></table></main><footer><div class=\"bg-cal-time\">{{ngModel|moment:'h:mm a'}}<select ng-options=\"t.value as t.display for t in times\" ng-model=\"time\"></select></div></footer></div>"
   );
 
 }]);

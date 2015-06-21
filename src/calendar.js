@@ -1,21 +1,19 @@
 (function() {
 
 	var months = [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-			'July',
-			'August',
-			'September',
-			'October',
-			'November',
-			'December'
-		],
-		hr24 = 24 * 60 * 60 * 1000,
-		$element;
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December'
+	];
 
 	function generateWeeks(date) {
 
@@ -51,11 +49,12 @@
 		return weeks;
 	}
 
-	function controller($scope, $element) {
+	function controller($scope, $element, $attrs) {
 
-		var timeIncrements = 30 * 60 * 1000,
+		var minuteStep = +($attrs.bgCalMinuteStep || 30),
+			milliStep = minuteStep * 60 * 1000,
 			baseDay = new Date($scope.ngModel || new Date()),
-			adjustedDate = new Date(Math.ceil(baseDay.getTime() / timeIncrements) * timeIncrements),
+			adjustedDate = new Date(Math.ceil(baseDay.getTime() / milliStep) * milliStep),
 			month = baseDay.getMonth(),
 			year = baseDay.getFullYear();
 
@@ -63,31 +62,22 @@
 		$scope.time = moment(adjustedDate).format('HH:mm');
 		$scope.times = [];
 
-		for(var i = 0; i<24; i++) {
-
-			var dh = i % 12,
-				vh = i,
-				a = i > 11 ? 'pm' : 'am';
-
-			if(dh % 12 === 0 ) {
-				dh = 12;
-			}
-
-			if(vh < 10) {
-				vh = '0' + vh;
-			}
+		var d = moment('19761215', 'YYYYMMDD');
+		for(var i = 0; i < 1440; i += minuteStep) {
 
 			$scope.times.push({
-				value: vh + ':00',
-				display: dh  + ':00 ' + a
+				value: d.format('HH:mm'),
+				display: d.format('h:mm a')
 			});
-			$scope.times.push({
-				value: vh + ':30',
-				display: dh + ':30 ' + a
-			});
+			d.add(minuteStep, 'm');
 		}
 
 		$scope.$watch('ngModel', function(newVal, oldVal) {
+
+			if(angular.isString(newVal)) {
+				console.log('converting to date');
+				newVal = new Date(newVal);
+			}
 
 			if(angular.isDate(newVal) &&
 				(!angular.isDate(oldVal) ||
@@ -122,7 +112,6 @@
 
 			if(day) {
 				$scope.date = day.date;
-				$scope.close();
 			}
 		};
 
@@ -163,8 +152,7 @@
 		return {
 			scope: {
 				ngModel: "=",
-				bgCalYear: "@",
-				bgCalMonth: "@"
+				bgCalMinuteSteps: "@"
 			},
 			templateUrl: '/calendar.html',
 			controller: controller
