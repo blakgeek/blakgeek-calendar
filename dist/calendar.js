@@ -14,6 +14,7 @@
 			'November',
 			'December'
 		],
+		hr24 = 24 * 60 * 60 * 1000,
 		widget;
 
 	function generateWeeks(date) {
@@ -35,7 +36,7 @@
 		for(i = 1; i <= end.getDate(); i++) {
 			days.push({
 				d: i,
-				date: new Date(y, m, i)
+				date: moment(new Date(y, m, i)).format('YYYYMMDD')
 			});
 		}
 
@@ -53,12 +54,12 @@
 	function controller($scope) {
 
 		var timeIncrements = 30 * 60 * 1000,
-			baseDay = new Date($scope.ngModel),
+			baseDay = new Date($scope.ngModel || new Date()),
 			adjustedDate = new Date(Math.ceil(baseDay.getTime() / timeIncrements) * timeIncrements),
 			month = baseDay.getMonth(),
 			year = baseDay.getFullYear();
 
-		$scope.ngModel = adjustedDate;
+		$scope.date = moment(adjustedDate).format('YYYYMMDD');
 		$scope.time = moment(adjustedDate).format('HH:mm');
 		$scope.times = [];
 
@@ -86,10 +87,21 @@
 			});
 		}
 
-		$scope.$watch('time', function(value) {
+		$scope.$watch('ngModel', function(newVal, oldVal) {
 
-			var date = moment($scope.ngModel);
-			$scope.ngModel = moment(date.format('YYYY-MM-DD ') + value, 'YYYY-MM-DD HH:mm').toDate();
+			if(angular.isDate(newVal) &&
+				(!angular.isDate(oldVal) ||
+				(angular.isDate(oldVal) && newVal.getTime() !== oldVal.getTime()))
+			) {
+				var date = moment(newVal);
+				$scope.date = date.format('YYYYMMDD');
+				$scope.time = date.format('HH:mm');
+			}
+		});
+
+		$scope.$watchGroup(['date', 'time'], function() {
+
+			$scope.ngModel = moment($scope.date + $scope.time, 'YYYYMMDDHH:mm').toDate();
 		});
 
 		update();
@@ -109,25 +121,32 @@
 		$scope.select = function(day) {
 
 			if(day) {
-				var date = moment(day.date);
-				$scope.ngModel = moment(date.format('YYYY-MM-DD ') + $scope.time, 'YYYY-MM-DD HH:mm').toDate();
+				$scope.date = day.date;
 				$scope.close();
 			}
 		};
 
 		$scope.isSelected = function(d) {
-			var model = $scope.ngModel;
-			return angular.isDate(model) && angular.isDate(model) && model.getTime() === d.date.getTime();
+
+			return d && d.date === $scope.date;
 		};
 
 		$scope.open = function() {
 
 			widget.addClass('open');
+			$scope.isOpen = true;
+		};
+
+		$scope.toggle = function() {
+
+			widget.toggleClass('open');
+			$scope.isOpen = !$scope.isOpen;
 		};
 
 		$scope.close = function() {
 
 			widget.removeClass('open');
+			$scope.isOpen = false;
 		};
 
 		function update() {
@@ -170,7 +189,7 @@ angular.module('blakgeek.calendar').run(['$templateCache', function($templateCac
   'use strict';
 
   $templateCache.put('/calendar.html',
-    "<div ng-click=\"open()\" class=\"bg-cal-date\">{{ngModel|moment:'MM/DD/YYYY'}}</div><div class=\"bg-cal-time\">{{ngModel|moment:'h:mm a'}}<select ng-options=\"t.value as t.display for t in times\" ng-model=\"time\"></select></div><div class=\"bg-cal-calendar\"><header><div ng-click=\"prev()\" class=\"bg-cal-prev\"></div><div class=\"bg-cal-month-year\">{{month}} {{year}}</div><div ng-click=\"next()\" class=\"bg-cal-next\"></div></header><table><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr></thead><tbody><tr ng-repeat=\"week in weeks\"><td ng-repeat=\"day in week track by $index\" ng-class=\"{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}\" ng-click=\"select(day)\">{{day.d}}</td></tr></tbody></table></div>"
+    "<div ng-click=\"toggle()\" class=\"bg-cal-date\">{{ngModel|moment:'MM/DD/YYYY'}}</div><div class=\"bg-cal-time\">{{ngModel|moment:'h:mm a'}}<select ng-options=\"t.value as t.display for t in times\" ng-model=\"time\"></select></div><div ng-if=\"isOpen\" class=\"bg-cal-calendar\"><header><div ng-click=\"prev()\" class=\"bg-cal-prev\"></div><div class=\"bg-cal-month-year\">{{month}} {{year}}</div><div ng-click=\"next()\" class=\"bg-cal-next\"></div></header><main><table><thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr></thead><tbody><tr ng-repeat=\"week in weeks\"><td ng-repeat=\"day in week track by $index\" ng-class=\"{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}\" ng-click=\"select(day)\">{{day.d}}</td></tr></tbody></table></main></div>"
   );
 
 }]);

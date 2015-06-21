@@ -14,6 +14,7 @@
 			'November',
 			'December'
 		],
+		hr24 = 24 * 60 * 60 * 1000,
 		widget;
 
 	function generateWeeks(date) {
@@ -35,7 +36,7 @@
 		for(i = 1; i <= end.getDate(); i++) {
 			days.push({
 				d: i,
-				date: new Date(y, m, i)
+				date: moment(new Date(y, m, i)).format('YYYYMMDD')
 			});
 		}
 
@@ -53,12 +54,12 @@
 	function controller($scope) {
 
 		var timeIncrements = 30 * 60 * 1000,
-			baseDay = new Date($scope.ngModel),
+			baseDay = new Date($scope.ngModel || new Date()),
 			adjustedDate = new Date(Math.ceil(baseDay.getTime() / timeIncrements) * timeIncrements),
 			month = baseDay.getMonth(),
 			year = baseDay.getFullYear();
 
-		$scope.ngModel = adjustedDate;
+		$scope.date = moment(adjustedDate).format('YYYYMMDD');
 		$scope.time = moment(adjustedDate).format('HH:mm');
 		$scope.times = [];
 
@@ -86,10 +87,21 @@
 			});
 		}
 
-		$scope.$watch('time', function(value) {
+		$scope.$watch('ngModel', function(newVal, oldVal) {
 
-			var date = moment($scope.ngModel);
-			$scope.ngModel = moment(date.format('YYYY-MM-DD ') + value, 'YYYY-MM-DD HH:mm').toDate();
+			if(angular.isDate(newVal) &&
+				(!angular.isDate(oldVal) ||
+				(angular.isDate(oldVal) && newVal.getTime() !== oldVal.getTime()))
+			) {
+				var date = moment(newVal);
+				$scope.date = date.format('YYYYMMDD');
+				$scope.time = date.format('HH:mm');
+			}
+		});
+
+		$scope.$watchGroup(['date', 'time'], function() {
+
+			$scope.ngModel = moment($scope.date + $scope.time, 'YYYYMMDDHH:mm').toDate();
 		});
 
 		update();
@@ -109,25 +121,32 @@
 		$scope.select = function(day) {
 
 			if(day) {
-				var date = moment(day.date);
-				$scope.ngModel = moment(date.format('YYYY-MM-DD ') + $scope.time, 'YYYY-MM-DD HH:mm').toDate();
+				$scope.date = day.date;
 				$scope.close();
 			}
 		};
 
 		$scope.isSelected = function(d) {
-			var model = $scope.ngModel;
-			return angular.isDate(model) && angular.isDate(model) && model.getTime() === d.date.getTime();
+
+			return d && d.date === $scope.date;
 		};
 
 		$scope.open = function() {
 
 			widget.addClass('open');
+			$scope.isOpen = true;
+		};
+
+		$scope.toggle = function() {
+
+			widget.toggleClass('open');
+			$scope.isOpen = !$scope.isOpen;
 		};
 
 		$scope.close = function() {
 
 			widget.removeClass('open');
+			$scope.isOpen = false;
 		};
 
 		function update() {

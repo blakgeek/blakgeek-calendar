@@ -1,33 +1,35 @@
-<div ng-click="open()" class="bg-cal-date">{{ngModel|moment:'MM/DD/YYYY'}}</div>
+<div ng-click="toggle()" class="bg-cal-date">{{ngModel|moment:'MM/DD/YYYY'}}</div>
 <div class="bg-cal-time">
     {{ngModel|moment:'h:mm a'}}
     <select ng-options="t.value as t.display for t in times" ng-model="time"></select>
 </div>
-<div class="bg-cal-calendar">
+<div ng-if="isOpen" class="bg-cal-calendar">
     <header>
         <div ng-click="prev()" class="bg-cal-prev"></div>
         <div class="bg-cal-month-year">{{month}} {{year}}</div>
         <div ng-click="next()" class="bg-cal-next"></div>
     </header>
-    <table>
-        <thead>
-            <tr>
-                <th>S</th>
-                <th>M</th>
-                <th>T</th>
-                <th>W</th>
-                <th>T</th>
-                <th>F</th>
-                <th>S</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="week in weeks">
-                <td ng-repeat="day in week track by $index"
-                    ng-class="{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}"
-                    ng-click="select(day)">{{day.d}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>S</th>
+                    <th>M</th>
+                    <th>T</th>
+                    <th>W</th>
+                    <th>T</th>
+                    <th>F</th>
+                    <th>S</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="week in weeks">
+                    <td ng-repeat="day in week track by $index"
+                        ng-class="{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}"
+                        ng-click="select(day)">{{day.d}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
 </div>

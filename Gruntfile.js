@@ -48,24 +48,16 @@ module.exports = function(grunt) {
 				dest: 'dist',
 				ext: '.css'
 			}
+		},
+		watch: {
+			sass: {
+				files: 'src/**/*',
+				tasks: 'default',
+				options: {
+					//livereload: true
+				}
+			}
 		}
-		//},
-		//watch: {
-		//	sass: {
-		//		files: 'src/sass/**/*.scss',
-		//		tasks: 'sass',
-		//		options: {
-		//			livereload: true
-		//		}
-		//	},
-		//	copy: {
-		//		files: ['src/**/*', '!src/sass/**/*.scss'],
-		//		tasks: 'copy',
-		//		options: {
-		//			livereload: true
-		//		}
-		//	}
-		//},
 		//sass: {
 		//	options: {
 		//		style: 'compressed'
