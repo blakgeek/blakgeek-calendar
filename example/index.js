@@ -1,4 +1,4 @@
-angular.module('example', ['blakgeek.calendar']).controller('ExampleCtrl', function($scope, $timeout) {
+angular.module('example', ['bg.calendar']).controller('ExampleCtrl', function($scope, $timeout) {
 
 	var defaultDate = new Date(2015,11,15);
 

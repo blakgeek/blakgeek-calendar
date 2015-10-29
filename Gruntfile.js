@@ -16,7 +16,7 @@ module.exports = function(grunt) {
 		ngtemplates: {
 			dist: {
 				options: {
-					module: 'blakgeek.calendar',
+					module: 'bg.calendar',
 					prefix: '/',
 					htmlmin: {
 						collapseWhitespace: true

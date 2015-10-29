@@ -16,10 +16,10 @@
     </head>
     <body ng-controller="ExampleCtrl">
 
-        <bg-cal ng-model="date1" bg-cal-minute-step="10"></bg-cal>
+        <bg-calendar ng-model="date1" time-increment="10"></bg-calendar>
         <div ng-click="reset()">{{date1}}</div>
 
-        <bg-cal ng-model="date2"></bg-cal>
+        <bg-calendar ng-model="date2"></bg-calendar>
         <div ng-click="reset()">{{date2}}</div>
 
         <script src="../bower_components/angular/angular.min.js"></script>
