@@ -57,58 +57,46 @@ module.exports = function(grunt) {
 					//livereload: true
 				}
 			}
+		},
+		copy: {
+			everything: {
+				expand: true,
+				cwd: 'src',
+				src: ['**', '!js/**', '!sass/**'],
+				dest: 'private'
+			},
+			development: {
+				expand: true,
+				cwd: 'src',
+				src: ['js/**'],
+				dest: 'private'
+			}
+		},
+		useminPrepare: {
+			html: 'src/*.html',
+			options: {
+				dest: 'private'
+			}
+		},
+		usemin: {
+			html: ['private/*.html']
+		},
+		bower_concat: {
+			all: {
+				dest: 'private/js/dependencies.js'
+			}
+		},
+		uglify: {
+			dependencies: {
+				options: {
+					mangle: true,
+					compress: true
+				},
+				files: {
+					"private/js/dependencies.js": 'private/js/dependencies.js'
+				}
+			}
 		}
-		//sass: {
-		//	options: {
-		//		style: 'compressed'
-		//	},
-		//	files: {
-		//		expand: true,
-		//		cwd: 'src/sass',
-		//		src: '**/*.scss',
-		//		dest: 'private/css',
-		//		ext: '.css'
-		//	}
-		//},
-		//copy: {
-		//	everything: {
-		//		expand: true,
-		//		cwd: 'src',
-		//		src: ['**', '!js/**', '!sass/**'],
-		//		dest: 'private'
-		//	},
-		//	development: {
-		//		expand: true,
-		//		cwd: 'src',
-		//		src: ['js/**'],
-		//		dest: 'private'
-		//	}
-		//},
-		//useminPrepare: {
-		//	html: 'src/*.html',
-		//	options: {
-		//		dest: 'private'
-		//	}
-		//},
-		//usemin: {
-		//	html: ['private/*.html']
-		//},
-		//bower_concat: {
-		//	all: {
-		//		dest: 'private/js/dependencies.js'
-		//	}
-		//},
-		//uglify: {
-		//	dependencies: {
-		//		options: {
-		//			mangle: true,
-		//			compress: true
-		//		},
-		//		files: {
-		//			"private/js/dependencies.js": 'private/js/dependencies.js'
-		//		}
-		//	}
-		//}
 	});
 
 };

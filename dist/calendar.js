@@ -38,7 +38,7 @@
 					firstDay = start.getDay(),
 					lastDay = end.getDay(),
 					days = [],
-					weeks = [],
+					weeks = [[], [], [], [], [], [null, null, null, null, null, null, null]],
 					i;
 
 				for(i = 0; i < firstDay; i++) {
@@ -57,7 +57,7 @@
 				}
 
 				for(i = 0; i < days.length; i += 7) {
-					weeks.push(days.slice(i, i + 7));
+					weeks[i/7] = days.slice(i, i + 7);
 				}
 
 				return weeks;
@@ -189,7 +189,7 @@ angular.module('bg.calendar').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('/calendar.html',
-    "<div ng-click=\"toggle()\" class=\"bg-cal-datetime\">{{ngModel|moment:'MM/DD/YYYY @ h:mm a'}}</div><div ng-click=\"toggle()\" class=\"bg-cal-toggle\"></div><div class=\"bg-cal-calendar\"><header><div ng-click=\"prev()\" class=\"bg-cal-prev\"></div><div class=\"bg-cal-month-year\">{{month}} {{year}}</div><div ng-click=\"next()\" class=\"bg-cal-next\"></div></header><main><table><thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody><tr ng-repeat=\"week in weeks\"><td ng-repeat=\"day in week track by $index\" ng-class=\"{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}\" ng-click=\"select(day)\">{{day.d}}</td></tr></tbody></table></main><footer><div class=\"bg-cal-time\">{{ngModel|moment:'h:mm a'}}<select ng-options=\"t.value as t.display for t in times\" ng-model=\"time\"></select></div></footer></div>"
+    "<div ng-click=\"toggle()\" class=\"bg-cal-value bg-cal-date\"><span>{{ngModel|moment:'MM/DD/YYYY'}}</span> <i class=\"bg-cal-toggle bg-cal-date-toggle\"></i></div><div ng-click=\"toggle()\" class=\"bg-cal-value bg-cal-time\"><span>{{ngModel|moment:'h:mm a'}}</span> <i class=\"bg-cal-toggle bg-cal-time-toggle\"></i></div><div class=\"bg-cal-calendar\"><header><i ng-click=\"prev()\" class=\"bg-cal-action bg-cal-prev\"></i><h1 class=\"bg-cal-month-year\">{{month}} {{year}}</h1><i ng-click=\"next()\" class=\"bg-cal-action bg-cal-next\"></i></header><main><table><thead><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead><tbody><tr ng-repeat=\"week in weeks\"><td ng-repeat=\"day in week track by $index\" ng-class=\"{'bg-cal-day': day !== null, 'bg-cal-blank': day === null, 'bg-cal-selected': isSelected(day)}\" ng-click=\"select(day)\">{{day.d}}</td></tr></tbody></table></main><footer><!--<i class=\"bg-cal-cancel\" ng-click=\"\"></i>--><i class=\"bg-cal-action bg-cal-accept\" ng-click=\"close()\"></i><!--<div class=\"bg-cal-time\">--><!--{{ngModel|moment:'h:mm a'}}--><!--<select ng-options=\"t.value as t.display for t in times\" ng-model=\"time\"></select>--><!--</div>--></footer></div>"
   );
 
 }]);

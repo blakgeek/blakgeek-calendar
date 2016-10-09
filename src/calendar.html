@@ -1,10 +1,18 @@
-<div ng-click="toggle()" class="bg-cal-datetime">{{ngModel|moment:'MM/DD/YYYY @ h:mm a'}}</div>
-<div ng-click="toggle()" class="bg-cal-toggle"></div>
+<div ng-click="toggle()" class="bg-cal-value bg-cal-date">
+    <span>{{ngModel|moment:'MM/DD/YYYY'}}</span>
+    <i class="bg-cal-toggle bg-cal-date-toggle"></i>
+</div>
+
+<div ng-click="toggle()" class="bg-cal-value bg-cal-time">
+    <span>{{ngModel|moment:'h:mm a'}}</span>
+    <i class="bg-cal-toggle bg-cal-time-toggle"></i>
+</div>
+
 <div class="bg-cal-calendar">
     <header>
-        <div ng-click="prev()" class="bg-cal-prev"></div>
-        <div class="bg-cal-month-year">{{month}} {{year}}</div>
-        <div ng-click="next()" class="bg-cal-next"></div>
+        <i ng-click="prev()" class="bg-cal-action bg-cal-prev"></i>
+        <h1 class="bg-cal-month-year">{{month}} {{year}}</h1>
+        <i ng-click="next()" class="bg-cal-action bg-cal-next"></i>
     </header>
     <main>
         <table>
@@ -30,9 +38,11 @@
         </table>
     </main>
     <footer>
-        <div class="bg-cal-time">
-            {{ngModel|moment:'h:mm a'}}
-            <select ng-options="t.value as t.display for t in times" ng-model="time"></select>
-        </div>
+        <!--<i class="bg-cal-cancel" ng-click=""></i>-->
+        <i class="bg-cal-action bg-cal-accept" ng-click="close()"></i>
+        <!--<div class="bg-cal-time">-->
+            <!--{{ngModel|moment:'h:mm a'}}-->
+            <!--<select ng-options="t.value as t.display for t in times" ng-model="time"></select>-->
+        <!--</div>-->
     </footer>
 </div>

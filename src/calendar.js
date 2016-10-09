@@ -38,7 +38,7 @@
 					firstDay = start.getDay(),
 					lastDay = end.getDay(),
 					days = [],
-					weeks = [],
+					weeks = [[], [], [], [], [], [null, null, null, null, null, null, null]],
 					i;
 
 				for(i = 0; i < firstDay; i++) {
@@ -57,7 +57,7 @@
 				}
 
 				for(i = 0; i < days.length; i += 7) {
-					weeks.push(days.slice(i, i + 7));
+					weeks[i/7] = days.slice(i, i + 7);
 				}
 
 				return weeks;
